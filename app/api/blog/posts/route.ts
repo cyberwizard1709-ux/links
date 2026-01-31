@@ -1,6 +1,22 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
+interface Post {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  excerpt: string | null;
+  featured: boolean;
+  published: boolean;
+  viewCount: number;
+  createdAt: Date;
+  publishedAt: Date | null;
+  updatedAt: Date;
+  tags: Array<{ id: string; name: string; slug: string }>;
+  author: { id: string; name: string | null; image: string | null };
+}
+
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
@@ -11,7 +27,11 @@ export async function GET(req: Request) {
 
     const skip = (page - 1) * limit;
 
-    const where: any = {
+    const where: {
+      published: boolean;
+      featured?: boolean;
+      tags?: { some: { slug: string } };
+    } = {
       published: true,
     };
 
@@ -50,7 +70,7 @@ export async function GET(req: Request) {
     ]);
 
     // Calculate reading time (rough estimate: 200 words per minute)
-    const postsWithMeta = posts.map((post) => {
+    const postsWithMeta = (posts as Post[]).map((post: Post) => {
       const wordCount = post.content.split(/\s+/).length;
       const readingTime = Math.ceil(wordCount / 200);
 
