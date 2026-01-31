@@ -3,6 +3,13 @@ import { db } from "@/lib/db";
 
 const ALLOWED_KEYS = ["siteTitle", "siteDescription", "faviconUrl"];
 
+interface Setting {
+  id: string;
+  key: string;
+  value: string;
+  updatedAt: Date;
+}
+
 export async function GET() {
   try {
     const settings = await db.settings.findMany({
@@ -11,7 +18,7 @@ export async function GET() {
       },
     });
 
-    const settingsMap = settings.reduce((acc, setting) => {
+    const settingsMap = (settings as Setting[]).reduce((acc: Record<string, string>, setting: Setting) => {
       acc[setting.key] = setting.value;
       return acc;
     }, {} as Record<string, string>);
