@@ -61,6 +61,7 @@ export default function RootLayout({
         {settings.faviconUrl && (
           <link rel="icon" href={settings.faviconUrl} type="image/x-icon" />
         )}
+        <script defer src="https://traffic.up.railway.app/script.js" data-website-id="0985c3b9-debe-43d7-bbe7-f4f917a95f0d"></script>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-50`}
